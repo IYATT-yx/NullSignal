@@ -1,0 +1,4 @@
+# 忽略 usbmmidd_v2 目录下的所有文件，不计入语言统计和代码检索
+usbmmidd_v2/** linguist-vendored
+usbmmidd_v2/** linguist-generated
+usbmmidd_v2/** linguist-documentation
