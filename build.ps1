@@ -30,15 +30,28 @@ $distDir = ".\dist\NullSignal.dist"
 $targetExe = Join-Path $distDir "NullSignal_win_amd64.exe"
 
 #  检查打包结果并自动补充资源文件夹
-if ($LASTEXITCODE -eq 0 -and (Test-Path $targetExe)) {
+if ($LASTEXITCODE -eq 0 -and (Test-Path $targetExe))
+{
     Write-Host "`n[+] Nuitka 编译成功！开始复制依赖文件..." -ForegroundColor Green
 
     # 复制 usbmmidd_v2 驱动文件夹
-    if (Test-Path ".\usbmmidd_v2") {
+    if (Test-Path ".\usbmmidd_v2")
+    {
         Copy-Item -Path ".\usbmmidd_v2" -Destination $distDir -Recurse -Force
         Write-Host "  -> 已成功递归复制 usbmmidd_v2 驱动目录" -ForegroundColor Gray
-    } else {
+    }
+    else
+    {
         Write-Warning "  ! 未找到源文件夹 .\usbmmidd_v2，请检查路径"
+    }
+
+    if (Test-Path "dist\NullSignal.dist")
+    {
+        if (Test-Path "dist\NullSignal_win_amd64")
+        {
+            Remove-Item -Path "dist\NullSignal_win_amd64" -Recurse -Force
+        }
+        Rename-Item -Path "dist\NullSignal.dist" -NewName "NullSignal_win_amd64"
     }
 
     $endTime = Get-Date
