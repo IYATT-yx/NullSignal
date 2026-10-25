@@ -99,7 +99,7 @@ class NullSignalApp:
         self.statusLabel.pack(side=tk.RIGHT, padx=5)
 
         # 中央诊断显示区
-        self.middlePanel = ttk.LabelFrame(self.root, text='以管理员身份运行可查看 阻止系统定时息屏 的程序：', padding=10)
+        self.middlePanel = ttk.LabelFrame(self.root, text='阻止系统定时息屏的程序：', padding=10)
         self.middlePanel.grid(row=1, column=0, sticky='nsew', padx=10, pady=(5, 10))
         self.middlePanel.columnconfigure(0, weight=1)
         self.middlePanel.rowconfigure(0, weight=1)
