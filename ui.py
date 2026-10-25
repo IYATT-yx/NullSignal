@@ -17,8 +17,9 @@ from buildtime import buildTime
 from config import getIconPath
 from win32utils import verifyDriverFiles, executeBlackoutSequence
 from powerchecker import fetchPowerRequests
-from autostart import AutoStartManager
 from systemtray import SystemTray
+
+from pystartup import StartupManager
 
 class NullSignalApp:
     def __init__(self, root, hidewindow: bool=False):
@@ -30,7 +31,7 @@ class NullSignalApp:
         self.root.resizable(True, True)
 
         # 初始化自启动设置
-        AutoStartManager.init(projectName=self.name, args=['--hide'], mode=AutoStartManager.MODE_TASK_SCHEDULER)
+        StartupManager.init(projectName=self.name, args=['--hide'], mode=StartupManager.MODE_TASK_SCHEDULER)
 
         # 点击关闭隐藏窗口
         self.root.protocol("WM_DELETE_WINDOW", lambda: self.root.withdraw())
@@ -114,24 +115,24 @@ class NullSignalApp:
         self.bottomPanel = ttk.Frame(self.root, padding=10)
         self.bottomPanel.grid(row=2, column=0, sticky='ew', padx=10, pady=(5, 10))
 
-        isAutoStart, err = AutoStartManager.checkAutoStart()
+        isStartup, err = StartupManager.checkStartup()
         if err is not None:
             messagebox.showerror("错误", f"检测开机自启动状态失败: {err}")
             exit(1)
-        self.isAutoStart = tk.BooleanVar(value=isAutoStart)
-        self.autoStartCheckbutton = ttk.Checkbutton(self.bottomPanel, text='开机自启动', variable=self.isAutoStart, command=self.toggleAutoStart)
-        self.autoStartCheckbutton.pack(side=tk.LEFT, padx=5)
+        self.isStartup = tk.BooleanVar(value=isStartup)
+        self.startupCheckbutton = ttk.Checkbutton(self.bottomPanel, text='开机自启动', variable=self.isStartup, command=self.toggleStartup)
+        self.startupCheckbutton.pack(side=tk.LEFT, padx=5)
 
-    def toggleAutoStart(self):
-        if self.isAutoStart.get():
-            res, err = AutoStartManager.setAutoStart()
+    def toggleStartup(self):
+        if self.isStartup.get():
+            res, err = StartupManager.setStartup()
             if err is not None:
-                self.isAutoStart.set(False)
+                self.isStartup.set(False)
                 messagebox.showerror("错误", f"设置开机自启动失败: {err}")
         else:
-            res, err = AutoStartManager.unsetAutoStart()
+            res, err = StartupManager.unsetStartup()
             if err is not None:
-                self.isAutoStart.set(True)
+                self.isStartup.set(True)
                 messagebox.showerror("错误", f"取消开机自启动失败: {err}")
 
     def triggerBlackout(self):
